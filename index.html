@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style type="text/css">
+				.text {
+				width: 700px;
+				height: 550px;
+				background-color: black;
+				border: solid 2px black;
+			}
+			
+			.imges {
+				width: 300px;
+				height: inherit;
+				/*background-color: red;*/
+				float: left;
+			}
+			
+			.lie {
+				width: 300px;
+				height: inherit;
+				/*background-color: yellow;*/
+				float: right;
+				position: relative;
+			}
+			
+			.img-music {
+				width: 200px;
+				height: 200px;
+				margin: 50px;
+				margin-top: 100px;
+				/*background-color: gold;*/
+			}
+			
+			.img-music img {
+				width: inherit;
+				height: inherit;
+				border-radius: 50%;
+				-webkit-animation: auto-play 2s linear infinite;
+				-webkit-animation-play-state: paused;
+			}
+			
+			.anniu {
+				width: 300;
+				height: 150px;
+				/*background-color: beige;*/
+				padding: 50px;
+				box-sizing: border-box;
+			}
+			
+			.anniu div {
+				float: left;
+				width: 22px;
+				height: 25px;
+				margin-right: 30px;
+				background-image: url(img/ico_btn_player.png);
+			}
+			
+			.anniu div:last-child {
+				margin-right: 0;
+			}
+			
+			.btn-prev {
+				background-position: -90px 2px;
+				margin-left: 40px;
+			}
+			
+			.btn-play {
+				background-position: -90px -60px;
+			}
+			
+			.btn-next {
+				background-position: -90px -28px;
+			}
+			
+			.text .lie ul {
+				list-style: none;
+				float: left;
+				position: absolute;
+				top: 0px;
+			}
+			
+			.text .lie ul li {
+				height: 40px;
+				width: 200px;
+				background-color: gainsboro;
+				margin-bottom: 5px;
+				line-height: 40px;
+				padding-left: 20px;
+				box-sizing: border-box;
+			}
+			
+			@-webkit-keyframes auto-play {
+				from {
+					-webkit-transform: rotate(0deg);
+				}
+				to {
+					-webkit-transform: rotate(359deg);
+				}
+			}
+			
+			.btn-paused {
+				background-position: -90px -90px;
+		</style>
+	</head>
+
+	<body>
+		<div class="text">
+			<audio id="mp3" src="img/陈瑞 - 不是情人不必情深.mp3" autoplay="autoplay"></audio>
+			<div class="imges">
+				<div class="img-music" id="tager">
+					<img id="img" src="img/小苹果.jpeg" />
+				</div>
+				<div class="anniu">
+					<div class="btn-prev" id="shang"></div>
+					<div class="btn-play" id="play"></div>
+					<div class="btn-next" id="next"></div>
+				</div>
+			</div>
+			<div class="lie">
+				<ul>
+					<li draggable="true" data-img="img/祁隆.jpg" data-src="img/陈瑞-不是情人不必情深.mp3">不是情人不必情深</li>
+					<li draggable="true" data-img="img/李玉刚.jpg" data-src="img/象牙塔.mp3">象牙塔</li>
+					<li draggable="true" data-img="img/祁隆.jpg" data-src="img/心之焰.mp3">心之焰</li>
+					<li draggable="true" data-img="img/李玉刚.jpg" data-src="img/潮人病.mp3">潮人病</li>
+					<li draggable="true" data-img="img/祁隆.jpg" data-src="img/不幸运.mp3">不幸运</li>
+					<li draggable="true" data-img="img/李玉刚.jpg" data-src="img/爱呀.mp3">爱呀</li>
+					<li draggable="true" data-img="img/祁隆.jpg" data-src="img/诉说.mp3">诉说</li>
+					<li draggable="true" data-img="img/李玉刚.jpg" data-src="img/看穿.mp3">看穿</li>
+					<li draggable="true" data-img="img/祁隆.jpg" data-src="img/那个男孩.mp3">那个男孩</li>
+					<li draggable="true" data-img="img/李玉刚.jpg" data-src="img/下雨了.mp3">下雨了</li>
+					<li draggable="true" data-img="img/祁隆.jpg" data-src="img/咖喱咖喱.mp3">咖喱咖喱</li>
+				</ul>
+			</div>
+		</div>
+		<script type="text/javascript" src="jquery-2.1.0.js"></script>
+		<script type="text/javascript">
+			var music = document.getElementsByTagName("li");
+			var mp3 = document.getElementById("mp3");
+			var img = document.getElementById("img");
+			var target = document.getElementById("tager");
+			var btnPlay = document.getElementById("play");
+			var tmp = null;
+			for(var i = 0; i < music.length; i++) {
+				music[i].ondragstart = function() {
+					tmp = this;
+				}
+			}
+
+			target.ondragover = function(e) {
+				e.preventDefault();
+				img.style.webkitAnimationPlayState = "paused";
+				mp3.pause();
+			}
+
+			target.ondrop = function() {
+				mp3.setAttribute("src", tmp.getAttribute("data-src"));
+				img.setAttribute("src", tmp.getAttribute("data-img"))
+				img.style.webkitAnimationPlayState = "running";
+				mp3.play();
+			}
+
+			target.onclick = function() {
+				if(mp3.paused == true) {
+					img.style.webkitAnimationPlayState = "running";
+					mp3.play();
+				} else {
+					img.style.webkitAnimationPlayState = "paused";
+					mp3.pause();
+				}
+			}
+
+			btnPlay.onclick = function() {
+				if(mp3.paused == true) {
+					mp3.play();
+					this.setAttribute("class", "btn-paused");
+					img.style.webkitAnimationPlayState = "running";
+				} else {
+					mp3.pause();
+					this.setAttribute("class", "btn-play");
+					img.style.webkitAnimationPlayState = "paused";
+				}
+			}
+		</script>
+	</body>
+
+</html>
